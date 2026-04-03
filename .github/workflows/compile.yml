@@ -1,0 +1,31 @@
+name: Build LaTeX Resume
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**.tex'
+      - '.github/workflows/compile.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: main.tex
+
+      - name: Commit and Push PDF
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "docs: update curriculo pdf"
+          file_pattern: 'main.pdf'
+          branch: main
